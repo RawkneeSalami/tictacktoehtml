@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe</title>
+<style>
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        width: 300px;
+    }
+    .cell {
+        width: 100px;
+        height: 100px;
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2em;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<h1>Tic Tac Toe</h1>
+<div class="container" id="container">
+</div>
+<script>
+    const container = document.getElementById('container');
+    let currentPlayer = 'X';
+    let gameState = ['', '', '', '', '', '', '', '', ''];
+
+    function render() {
+        container.innerHTML = '';
+        gameState.forEach((value, index) => {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.textContent = value;
+            cell.addEventListener('click', () => {
+                if (!value) {
+                    gameState[index] = currentPlayer;
+                    render();
+                    checkWinner();
+                    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                }
+            });
+            container.appendChild(cell);
+        });
+    }
+
+    function checkWinner() {
+        const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        for (const condition of winConditions) {
+            const [a, b, c] = condition;
+            if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+                alert(`${gameState[a]} wins!`);
+                resetGame();
+                return;
+            }
+        }
+
+        if (!gameState.includes('')) {
+            alert("It's a draw!");
+            resetGame();
+            return;
+        }
+    }
+
+    function resetGame() {
+        currentPlayer = 'X';
+        gameState = ['', '', '', '', '', '', '', '', ''];
+        render();
+    }
+
+    render();
+</script>
+</body>
+</html>
